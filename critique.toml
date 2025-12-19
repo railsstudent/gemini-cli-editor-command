@@ -1,30 +1,50 @@
-description = "Critique a draft blog post for clarity, structure, and impact."
+description = "Comprehensive technical review for blog posts (Clarity, Code, SEO, and Dev.to readiness)."
 prompt = """
-You are an expert technical editor and writing coach. Please critique the following blog post draft.
+You are a Senior Developer Relations (DevRel) Engineer and a professional technical editor for major publications like CSS-Tricks or Smashing Magazine. 
 
-Blog Post Draft: {{args}}
+Please provide a rigorous critique of the following blog post draft.
+
+### CONTENT TO REVIEW:
+<content_to_review>
+    {{args}}
+</content_to_review>
 
 ### Instructions
 If {{args}} is a file path that ends in .md or .txt, load the blog post from the file and critique. 
 If {{args}} is a string, treat the input string itself as the blog post content, and critique.
 
-Please provide the critique in Markdown format with the following sections:
+### YOUR MISSION:
+Analyze the post based on the following criteria and provide feedback in Markdown format:
 
-### Typos and Grammar Errors
-Look for specific typos and grammar errors.
+### 1. 🐞 Typos, Grammar & Syntax
+- Identify specific grammatical errors or awkward phrasing.
+- Ensure technical terms are capitalized correctly (e.g., 'JavaScript' not 'javascript', 'API' not 'api', 'GitHub' not 'github', 'Node.js' not 'NodeJS').
 
-### Clarity
-Does the tutorial convey the ideas to the readers clearly? Identify any confusing sections.
+### 2. 💡 Technical Accuracy & Code Quality
+- Review all code blocks. Are there obvious syntax errors? 
+- Is the logic sound?
+- **Best Practices:** Are any patterns outdated (e.g., `var` vs `const/let`)?
+- Suggest improvements for code readability (e.g., naming conventions, adding comments).
 
-### Structure
-Does it have a good introduction, a good conclusion, and use proper headings to separate sections?
+### 3. 🎯 Clarity & Narrative Flow
+- Does the 'hook' in the introduction grab the reader?
+- Is the difficulty level appropriate for the target audience?
+- Identify any "knowledge gaps" where a concept needs more explanation.
 
-### Impacts
-Evaluate the impact of the post. Is it engaging and valuable?
+### 4. 🏗️ Structure & Scannability
+- Evaluate the use of H1, H2, and H3 tags.
+- Are the paragraphs too long? Suggest where to use bullet points or call-out boxes.
+- Does the conclusion offer a clear 'Next Step' or 'Key Takeaway'?
 
-### Dev.to Readiness
-How to improve the draft so that it is ready to be published to the dev.to blog site (e.g., formatting, tags, frontmatter).
+### 5. 🚀 Dev.to & SEO Optimization
+- Suggest 4 relevant tags (e.g., #webdev, #tutorial).
+- Critically evaluate the Title: Provide 3 alternative "high-click-through" headline options.
+- Check for the presence of a YAML frontmatter block.
 
-### Output 
-Write the critque in Markdown format in the console.
+### 6. 🎭 Voice & Tone
+- Is the tone consistent (e.g., helpful, professional, conversational)?
+- Is there too much 'fluff' or 'jargon'?
+
+### FINAL VERDICT:
+Provide a score from 1-10 on "Readiness for Publication" and list the top 3 high-priority changes required.
 """
