@@ -1,0 +1,30 @@
+description = "Critique a draft blog post for clarity, structure, and impact."
+prompt = """
+You are an expert technical editor and writing coach. Please critique the following blog post draft.
+
+Blog Post Draft: {{args}}
+
+### Instructions
+If {{args}} is a file path that ends in .md or .txt, load the blog post from the file and critique. 
+If {{args}} is a string, treat the input string itself as the blog post content, and critique.
+
+Please provide the critique in Markdown format with the following sections:
+
+### Typos and Grammar Errors
+Look for specific typos and grammar errors.
+
+### Clarity
+Does the tutorial convey the ideas to the readers clearly? Identify any confusing sections.
+
+### Structure
+Does it have a good introduction, a good conclusion, and use proper headings to separate sections?
+
+### Impacts
+Evaluate the impact of the post. Is it engaging and valuable?
+
+### Dev.to Readiness
+How to improve the draft so that it is ready to be published to the dev.to blog site (e.g., formatting, tags, frontmatter).
+
+### Output 
+Write the critque in Markdown format in the console.
+"""
