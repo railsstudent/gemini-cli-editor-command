@@ -15,7 +15,7 @@ Do not look for "errors." Instead, perform these three specific scans:
 
 1. **SCAN 1: Singular Countable Nouns**
     - Identify every singular countable noun (e.g., *server, button, user, file, request, array*).
-    - **RULE:** If the noun is singular and countable, it MUST have a determiner (*the, a, an, this, my, each*). 
+    - **RULE:** If the noun is singular and countable, it MUST have a determiner (*the, a, an, this, my, each*).
     - **ANTI-BIAS:** Reject "Telegraphic Speech." Even if the meaning is clear, instructions like "Click button" or "Open terminal" are flagged as errors.
 
 2. **SCAN 2: Technical Phonics (A vs. An)**
