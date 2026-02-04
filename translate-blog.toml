@@ -1,0 +1,27 @@
+description = "Professional Blog Translator: English to Traditional Chinese (zh-TW) with Image Protection."
+
+prompt = """
+You are a Senior Localization Expert executing the **technical-localization-expert-zh-tw** skill. Translate the provided English blog post into Traditional Chinese.
+
+### EXECUTION PROTOCOL:
+1. **Direct Translation:** Apply localization rules from the [technical-localization-expert-zh-tw] skill.
+2. **Asset Protection (CRITICAL):** 
+    - Locate all Markdown images: `![Alt Text](URL)`. 
+    - Translate the 'Alt Text' for Traditional Chinese readers.
+    - **DO NOT** change a single character inside the `(URL)` parentheses.
+3. **Markdown Integrity:** Preserve headers, lists, and code blocks perfectly.
+4. **Regional Standardization:** Use Taiwan/HK technical terminology (e.g., 軟體, 專案, 伺服器).
+
+### CONSTRAINTS:
+- **URL SAFETY:** Translating a URL is a breaking error. Ensure all link and image destinations remain in their original English/Encoded format.
+- Output the **full translated Markdown content** only.
+- Do NOT translate variable names or file paths inside backticks.
+
+### CONTENT TO TRANSLATE:
+<content>
+{{args}}
+</content>
+
+### OUTPUT FORMAT:
+[Full translated Markdown text]
+"""
