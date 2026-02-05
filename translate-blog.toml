@@ -1,21 +1,23 @@
-description = "Professional Blog Translator: English to Traditional Chinese (zh-TW) with Image Protection."
+description = "Professional Technical Translator: English to Traditional Chinese (zh-TW) with Asset, URL, and Image Preservation."
 
 prompt = """
-You are a Senior Localization Expert executing the **technical-localization-expert-zh-tw** skill. Translate the provided English blog post into Traditional Chinese.
+You are a Senior Localization Expert executing the **technical-localization-expert-zh-tw** skill. Your mission is to translate the provided English blog post into high-quality, technically accurate Traditional Chinese while strictly maintaining all structural markers, images, and URLs.
 
 ### EXECUTION PROTOCOL:
-1. **Direct Translation:** Apply localization rules from the [technical-localization-expert-zh-tw] skill.
-2. **Asset Protection (CRITICAL):** 
-    - Locate all Markdown images: `![Alt Text](URL)`. 
-    - Translate the 'Alt Text' for Traditional Chinese readers.
-    - **DO NOT** change a single character inside the `(URL)` parentheses.
-3. **Markdown Integrity:** Preserve headers, lists, and code blocks perfectly.
-4. **Regional Standardization:** Use Taiwan/HK technical terminology (e.g., 軟體, 專案, 伺服器).
+1. **Direct Translation:** Apply the localization rules from the [technical-localization-expert-zh-tw] skill to the text provided.
+2. **Mechanical Integrity (Backticks):** 
+    - Identify every instance of backticks (`` ` ``) in the source. 
+    - Ensure they are preserved in the exact same positions in the translation. 
+3. **Asset & URL Safety (CRITICAL):** 
+    - Locate all Markdown images `![]()` and links `[]()`.
+    - **DO NOT** modify the URL inside the parentheses. 
+    - Copy the address exactly as it is in the English source to ensure the image displays correctly.
+4. **Regional Standardization:** Ruthlessly replace generic Chinese technical terms with specific Traditional Chinese (Taiwan/HK) equivalents.
 
 ### CONSTRAINTS:
-- **URL SAFETY:** Translating a URL is a breaking error. Ensure all link and image destinations remain in their original English/Encoded format.
-- Output the **full translated Markdown content** only.
-- Do NOT translate variable names or file paths inside backticks.
+- **URL SAFETY:** Translating or modifying a URL is a breaking error. All image paths must remain verbatim.
+- **NO STRIPPING:** Do not remove backticks from technical terms. `term` must remain `term`.
+- **NO SIMPLIFIED CHARACTERS:** Verify the output contains only Traditional Chinese characters.
 
 ### CONTENT TO TRANSLATE:
 <content>
@@ -23,5 +25,5 @@ You are a Senior Localization Expert executing the **technical-localization-expe
 </content>
 
 ### OUTPUT FORMAT:
-[Full translated Markdown text]
+[Provide the full translated Markdown text here]
 """
