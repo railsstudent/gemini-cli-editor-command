@@ -4,97 +4,116 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Script to validate external HTTP/HTTPS links in a Markdown file.
- * Usage: ./check-links.js <path-to-markdown-file>
+ * Script to validate asset integrity and translation status.
+ * Usage: ./check-links.js <source-en.md> <target-translated.md>
  */
 
 async function checkMarkdownLinks() {
-  // 1. Get the file path from CLI arguments
-  const filePath = process.argv[2];
+  const sourcePath = process.argv[2];
+  const targetPath = process.argv[3];
 
-  if (!filePath) {
-    console.error('Error: Please provide a markdown file path.');
-    console.log('Usage: ./check-links.js document.md');
+  if (!sourcePath || !targetPath) {
+    console.error('Error: Please provide both source and target markdown files.');
+    console.log('Usage: ./check-links.js source-en.md target-es.md');
     process.exit(1);
   }
 
-  // 2. Read the file
-  let content;
   try {
-    content = fs.readFileSync(path.resolve(filePath), 'utf8');
-  } catch (err) {
-    console.error(`Error: Could not read file "${filePath}"`);
-    process.exit(1);
-  }
+    const sourceContent = fs.readFileSync(path.resolve(sourcePath), 'utf8');
+    const targetContent = fs.readFileSync(path.resolve(targetPath), 'utf8');
 
-  // 3. Extract links using Regex
-  // Matches [text](url) where url starts with http or https
-  const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
-  const links = [];
-  let match;
+    // Matches ![Alt Text](url) or [Link Text](url)
+    // Group 1: optional '!' | Group 2: Text | Group 3: URL
+    const assetRegex = /(!?)\[([^\]]*)\]\(([^)]+)\)/g;
 
-  while ((match = linkRegex.exec(content)) !== null) {
-    links.push({ text: match[1], url: match[2] });
-  }
-
-  if (links.length === 0) {
-    console.log('No external links found to check.');
-    process.exit(0);
-  }
-
-  console.log(`Found ${links.length} links. Checking status...\n`);
-
-  // 4. Validate links in parallel
-  const results = await Promise.all(links.map(async (link) => {
-    try {
-      // Use HEAD request first (faster, no body download)
-      // Some servers block HEAD, so we fallback to GET if needed
-      let response = await fetch(link.url, { 
-        method: 'HEAD', 
-        signal: AbortSignal.timeout(5000) 
-      });
-
-      if (!response.ok) {
-        response = await fetch(link.url, { 
-            method: 'GET', 
-            signal: AbortSignal.timeout(5000) 
+    const extract = (content) => {
+      const results = [];
+      let match;
+      while ((match = assetRegex.exec(content)) !== null) {
+        results.push({
+          isImage: match[1] === '!',
+          text: match[2].trim(),
+          url: match[3].trim()
         });
       }
+      return results;
+    };
 
-      return {
-        url: link.url,
-        status: response.status,
-        ok: response.ok
-      };
-    } catch (error) {
-      return {
-        url: link.url,
-        status: error.name === 'TimeoutError' ? 'Timeout' : 'Error',
-        ok: false,
-        error: error.message
-      };
+    const sourceAssets = extract(sourceContent);
+    const targetAssets = extract(targetContent);
+
+    if (sourceAssets.length !== targetAssets.length) {
+      console.warn(`⚠️ Warning: Asset count mismatch! Source: ${sourceAssets.length}, Target: ${targetAssets.length}\n`);
+    }
+
+    let errors = [];
+    let externalLinksToCheck = [];
+
+    // 1. Validation Loop
+    sourceAssets.forEach((src, i) => {
+      const trg = targetAssets[i];
+      if (!trg) {
+        errors.push(`Missing asset in target: [${src.text}](${src.url})`);
+        return;
+      }
+
+      // Check if text is translated (should NOT match unless it's an empty string or code)
+      const isCode = src.text.startsWith('`') && src.text.endsWith('`');
+      if (src.text && src.text === trg.text && !isCode) {
+        errors.push(`Untranslated Text: Asset #${i+1} still says "${src.text}"`);
+      }
+
+      // Check URL Integrity (Internal paths might differ if depth changed, but external must match)
+      if (src.url.startsWith('http')) {
+        if (src.url !== trg.url) {
+          errors.push(`URL Mismatch: Source "${src.url}" vs Target "${trg.url}"`);
+        }
+        externalLinksToCheck.push(trg.url);
+      } else {
+        // For relative paths, we ensure they aren't accidentally translated into words
+        // (e.g., ../assets/ changed to ../activos/)
+        if (trg.url.match(/[^\x00-\x7F]/)) { 
+           errors.push(`Relative Path Error: Path "${trg.url}" contains non-English characters.`);
+        }
+      }
+    });
+
+    // 2. Report Integrity Errors
+    if (errors.length > 0) {
+      console.log('❌ Integrity & Translation Errors:');
+      errors.forEach(err => console.log(`  - ${err}`));
+    } else {
+      console.log('✅ Asset integrity and translation checks passed.');
+    }
+
+    // 3. Optional: Validate External Links Connectivity
+    if (externalLinksToCheck.length > 0) {
+      console.log(`\nChecking connectivity for ${externalLinksToCheck.length} external links...`);
+      await validateConnectivity(externalLinksToCheck);
+    }
+
+    if (errors.length > 0) process.exit(1);
+
+  } catch (err) {
+    console.error(`File Error: ${err.message}`);
+    process.exit(1);
+  }
+}
+
+async function validateConnectivity(urls) {
+  const results = await Promise.all(urls.map(async (url) => {
+    try {
+      let response = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(5000) });
+      if (!response.ok) response = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(5000) });
+      return { url, ok: response.ok, status: response.status };
+    } catch (e) {
+      return { url, ok: false, status: 'Error/Timeout' };
     }
   }));
 
-  // 5. Report Results
-  let brokenCount = 0;
   results.forEach(res => {
-    if (res.ok) {
-      console.log(`✅ [${res.status}] ${res.url}`);
-    } else {
-      console.log(`❌ [${res.status}] ${res.url}`);
-      brokenCount++;
-    }
+    if (!res.ok) console.log(`  ❌ [${res.status}] ${res.url}`);
   });
-
-  console.log('\n--- Summary ---');
-  if (brokenCount === 0) {
-    console.log('All links are valid! 🎉');
-    process.exit(0);
-  } else {
-    console.log(`${brokenCount} broken link(s) detected.`);
-    process.exit(1); // Exit with error for the Agent to catch
-  }
 }
 
 checkMarkdownLinks();
