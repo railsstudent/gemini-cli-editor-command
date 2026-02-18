@@ -10,3 +10,4 @@
 | Scalability | 擴展性 / 彈性 | |
 | High Availability | 高可用性 | |
 | Repository | 存放庫 / 儲存庫 | |
+| Deployment | 部署 / 佈署 | |

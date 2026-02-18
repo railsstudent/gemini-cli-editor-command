@@ -35,3 +35,4 @@
 | Protocol | 協定 | Never use 协议 (CN) |
 | Latency | 延遲 | |
 | Throughput | 吞吐量 | |
+| Middleware | 中介軟體 | |

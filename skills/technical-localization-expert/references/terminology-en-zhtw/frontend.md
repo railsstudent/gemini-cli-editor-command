@@ -35,3 +35,6 @@
 | Promise | Promise / 承諾 | Usually kept as "Promise" |
 | SEO | 搜尋引擎最佳化 | Never use 优化 (CN) |
 | Accessibility | 無障礙 / 可存取性 | a11y |
+| Routing | 路由 | |
+| State Management | 狀態管理 | |
+| Prop | Prop / 屬性 | Usually keep "Prop" in English in coding context |
