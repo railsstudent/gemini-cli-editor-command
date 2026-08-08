@@ -20,7 +20,7 @@
 | Single Page App | 單頁應用程式 | SPA |
 | Server Side Rendering | 伺服器端渲染 | SSR |
 | Client Side Rendering | 用戶端渲染 | CSR |
-| Hydration | 注入 / 復水 | "注入" is more common in discussion |
+| Hydration | 水合 / 水合作用 | "水合" is the standard term in React/Vue/Angular communities |
 | Build | 建置 | Never use 构建 (CN) |
 | Bundle / Bundler | 打包 / 打包工具 | |
 | Transpiler | 轉譯器 | (e.g., Babel) |
@@ -38,3 +38,5 @@
 | Routing | 路由 | |
 | State Management | 狀態管理 | |
 | Prop | Prop / 屬性 | Usually keep "Prop" in English in coding context |
+| Component | 元件 ||                                                                
+| User Interface | 使用者介面 (UI) ||                 

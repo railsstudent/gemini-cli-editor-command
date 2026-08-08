@@ -22,7 +22,7 @@
 | Caching | 快取 | Never use 缓存 (CN) |
 | Thread | 執行緒 | Never use 线程 (CN) |
 | Process | 程序 | Never use 进程 (CN) |
-| Concurrency | 並行 / 並發 | |
+| Concurrency | 並行 / 共時性 | Never use 並發 (CN) |
 | Asynchronous | 非同步 | Never use 异步 (CN) |
 | Synchronous | 同步 | |
 | Callback | 回呼 | |
@@ -36,3 +36,4 @@
 | Latency | 延遲 | |
 | Throughput | 吞吐量 | |
 | Middleware | 中介軟體 | |
+| Cache | 快取 | |

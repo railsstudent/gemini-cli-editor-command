@@ -15,3 +15,6 @@
 | Support | 支援 | Never use 支持 (unless it's "to back someone") |
 | Default | 預設 | Never use 默认 |
 | User | 使用者 | Never use 用户 |
+| Instance | 執行個體 | |
+| Application | 應用程式 | |
+| Code/Source Code | 程式碼 | |
